@@ -17,6 +17,7 @@ public class MainActivityFragment extends Fragment {
     }
 
     private Button nameActivityButton;
+    private Button gameActivityButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +32,17 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), NameActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        gameActivityButton = (Button) rootView.findViewById(R.id.gameActivityButton);
+
+        gameActivityButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), NewGameActivity.class);
                 startActivity(intent);
             }
         });

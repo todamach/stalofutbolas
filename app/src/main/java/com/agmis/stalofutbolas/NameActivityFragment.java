@@ -1,6 +1,10 @@
 package com.agmis.stalofutbolas;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -50,8 +54,12 @@ public class NameActivityFragment extends Fragment implements AdapterView.OnItem
                 if(selectedPosition == 0 || selectedName == null){
                     Toast.makeText(v.getContext(), "Reikia pasirinkti vardą!", Toast.LENGTH_SHORT).show();
                 }else{
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(NAMEKEY, selectedName);
+                    editor.apply();
+
                     Intent intent = new Intent(v.getContext(), NewGameActivity.class);
-                    intent.putExtra(NAMEKEY, selectedName);
                     startActivity(intent);
                 }
             }

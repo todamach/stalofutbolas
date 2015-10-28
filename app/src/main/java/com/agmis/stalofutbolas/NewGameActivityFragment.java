@@ -1,6 +1,9 @@
 package com.agmis.stalofutbolas;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,13 +28,10 @@ public class NewGameActivityFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_new_game, container, false);
         nameTextView = (TextView) rootView.findViewById(R.id.nameTextView);
-        Intent iin = getActivity().getIntent();
-        Bundle bundle = iin.getExtras();
 
-        if(bundle != null){
-            nameString = (String) bundle.get(NameActivityFragment.NAMEKEY);
-            nameTextView.setText(nameString);
-        }
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        nameString = prefs.getString(NameActivityFragment.NAMEKEY, "null");
+        nameTextView.setText(nameString);
 
         return rootView;
     }
