@@ -7,4 +7,5 @@
     <string name="next">Toliau</string>
     <string name="title_activity_new_game">NewGameActivity</string>
     <string name="game_activity">Pridėti žaidimą</string>
+    <string name="addGame">Pridėti žaidimą</string>
 </resources>

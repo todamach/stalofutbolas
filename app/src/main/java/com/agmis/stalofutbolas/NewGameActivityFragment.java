@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -18,6 +20,7 @@ public class NewGameActivityFragment extends Fragment {
 
     private String nameString;
     private TextView nameTextView;
+    private Button newGameButton;
 
     public NewGameActivityFragment() {
     }
@@ -32,6 +35,16 @@ public class NewGameActivityFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         nameString = prefs.getString(NameActivityFragment.NAMEKEY, "null");
         nameTextView.setText(nameString);
+
+        newGameButton = (Button) rootView.findViewById(R.id.newGameButton);
+
+        newGameButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Atidaryti žaidimo pridėjimo activity..", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return rootView;
     }

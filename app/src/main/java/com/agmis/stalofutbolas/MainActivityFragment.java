@@ -1,6 +1,8 @@
 package com.agmis.stalofutbolas;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -46,6 +48,18 @@ public class MainActivityFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+
+        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String nameString = prefs.getString(NameActivityFragment.NAMEKEY, "null");
+
+        if(nameString == null){
+            Intent intent = new Intent(v.getContext(), NameActivity.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(v.getContext(), NewGameActivity.class);
+            startActivity(intent);
+        }*/
 
         return rootView;
     }
