@@ -24,6 +24,10 @@
             android:name=".NewGameActivity"
             android:label="@string/title_activity_new_game" >
         </activity>
+        <activity
+            android:name=".VersusActivity"
+            android:label="@string/title_activity_versus" >
+        </activity>
     </application>
 
 </manifest>

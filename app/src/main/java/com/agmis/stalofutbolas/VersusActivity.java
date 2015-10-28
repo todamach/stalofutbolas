@@ -1,34 +1,23 @@
-package com.agmis.stalofutbolas.activity;
+package com.agmis.stalofutbolas;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.agmis.stalofutbolas.R;
-
-public class MainActivity extends AppCompatActivity {
+public class VersusActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//
-//        VersusFragment versusFragment = new VersusFragment();
-//        EloListFragment eloListFragment = new EloListFragment();
-//
-//        transaction.add(R.id.fragment_container, versusFragment);
-//
-//        transaction.commit();
-
+        setContentView(R.layout.activity_versus);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_versus, menu);
         return true;
     }
 
@@ -46,6 +35,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

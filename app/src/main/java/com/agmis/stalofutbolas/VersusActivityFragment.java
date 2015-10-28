@@ -1,4 +1,4 @@
-package com.agmis.stalofutbolas.fragment;
+package com.agmis.stalofutbolas;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,7 +29,7 @@ import butterknife.OnItemSelected;
 /**
  * Created by sasly on 2015-10-28.
  */
-public class VersusFragment extends Fragment {
+public class VersusActivityFragment extends Fragment {
 
     @Bind(R.id.bluePlayer1)
     public Spinner bluePlayer1;
@@ -57,7 +57,7 @@ public class VersusFragment extends Fragment {
     private ArrayAdapter<CharSequence> scoresPurpleAdapter;
     private ArrayAdapter<CharSequence> scoresBlueAdapter;
 
-    public VersusFragment() {
+    public VersusActivityFragment() {
     }
 
     @Override

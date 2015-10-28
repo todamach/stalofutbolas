@@ -1,4 +1,4 @@
-package com.agmis.stalofutbolas.fragment;
+package com.agmis.stalofutbolas;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
