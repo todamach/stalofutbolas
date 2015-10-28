@@ -1,4 +1,4 @@
-package com.agmis.stalofutbolas;
+package com.agmis.stalofutbolas.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.agmis.stalofutbolas.R;
 
 /**
  * A placeholder fragment containing a simple view.
