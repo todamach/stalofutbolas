@@ -24,7 +24,7 @@ public class MainActivity extends FragmentActivity {
         VersusFragment versusFragment = new VersusFragment();
         EloListFragment eloListFragment = new EloListFragment();
 
-        transaction.add(R.id.fragment_container, eloListFragment);
+        transaction.add(R.id.fragment_container, versusFragment);
 
         transaction.commit();
 

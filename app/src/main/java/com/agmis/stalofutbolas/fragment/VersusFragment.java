@@ -15,7 +15,9 @@ import android.widget.Toast;
 
 import com.agmis.stalofutbolas.R;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -48,6 +50,9 @@ public class VersusFragment extends Fragment {
     String[] allScores;
     String[] allPlayers;
 
+    List<String> purpleScores;
+    List<String>  blueScores;
+
     private ArrayAdapter<CharSequence> playersAdapter;
     private ArrayAdapter<CharSequence> scoresPurpleAdapter;
     private ArrayAdapter<CharSequence> scoresBlueAdapter;
@@ -63,13 +68,18 @@ public class VersusFragment extends Fragment {
         allScores = getResources().getStringArray(R.array.scores);
         allPlayers = getResources().getStringArray(R.array.players);
 
+
         playersAdapter = ArrayAdapter.createFromResource(activity, R.array.players, R.layout.spinner_item);
         playersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        scoresBlueAdapter = ArrayAdapter.createFromResource(activity, R.array.scores, R.layout.spinner_item);
+        scoresBlueAdapter = new ArrayAdapter<>(activity,R.layout.spinner_item);
+        blueScores = new LinkedList<>(Arrays.asList(allScores));
+        scoresBlueAdapter.addAll(blueScores);
         scoresBlueAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        scoresPurpleAdapter = ArrayAdapter.createFromResource(activity, R.array.scores, R.layout.spinner_item);
+        scoresPurpleAdapter = new ArrayAdapter<>(activity,R.layout.spinner_item);
+        purpleScores = new LinkedList<>(Arrays.asList(allScores));
+        scoresPurpleAdapter.addAll(purpleScores);
         scoresPurpleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         bluePlayer1.setAdapter(playersAdapter);
@@ -97,14 +107,17 @@ public class VersusFragment extends Fragment {
 
     @OnItemSelected(R.id.blueScore)
     public void OnBlueScoreSelected(AdapterView<?> parent, View view, int pos, long id) {
-//
-//        int selectedScore = Integer.parseInt(((TextView)view).getText().toString());
-//        scoresPurpleAdapter.notifyDataSetChanged();
-//        scoresPurpleAdapter.addAll(Arrays.copyOfRange(allScores,0,allScores.length - selectedScore));
+        int selectedScore = Integer.parseInt(((TextView) view).getText().toString());
+        scoresPurpleAdapter.clear();
+        scoresPurpleAdapter.addAll(Arrays.copyOfRange(allScores, 0, allScores.length - selectedScore));
+        scoresPurpleAdapter.notifyDataSetChanged();
     }
 
     @OnItemSelected(R.id.purpleScore)
     public void OnPurpleScoreSelected(AdapterView<?> parent, View view, int pos, long id) {
-
+        int selectedScore = Integer.parseInt(((TextView) view).getText().toString());
+        scoresBlueAdapter.clear();
+        scoresBlueAdapter.addAll(Arrays.copyOfRange(allScores, 0, allScores.length - selectedScore));
+        scoresBlueAdapter.notifyDataSetChanged();
     }
 }
