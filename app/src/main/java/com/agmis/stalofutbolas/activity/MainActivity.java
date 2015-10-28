@@ -1,16 +1,33 @@
-package com.agmis.stalofutbolas;
+package com.agmis.stalofutbolas.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import com.agmis.stalofutbolas.R;
+import com.agmis.stalofutbolas.fragment.EloListFragment;
+import com.agmis.stalofutbolas.fragment.VersusFragment;
+
+public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        VersusFragment versusFragment = new VersusFragment();
+        EloListFragment eloListFragment = new EloListFragment();
+
+        transaction.add(R.id.fragment_container, eloListFragment);
+
+        transaction.commit();
+
     }
 
 
@@ -35,4 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
