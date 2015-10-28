@@ -42,7 +42,6 @@ public class NewGameActivityFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Atidaryti žaidimo pridėjimo activity..", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), VersusActivity.class);
                 startActivity(intent);
             }

@@ -1,6 +1,8 @@
 package com.agmis.stalofutbolas;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -29,7 +31,7 @@ import butterknife.OnItemSelected;
 /**
  * Created by sasly on 2015-10-28.
  */
-public class VersusActivityFragment extends Fragment {
+public class VersusActivityFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     @Bind(R.id.bluePlayer1)
     public Spinner bluePlayer1;
@@ -57,6 +59,11 @@ public class VersusActivityFragment extends Fragment {
     private ArrayAdapter<CharSequence> scoresPurpleAdapter;
     private ArrayAdapter<CharSequence> scoresBlueAdapter;
 
+    private String lastBluePlayer1;
+    private String lastBluePlayer2;
+    private String lastPurplePlayer1;
+    private String lastPurplePlayer2;
+
     public VersusActivityFragment() {
     }
 
@@ -65,11 +72,16 @@ public class VersusActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_versus, container, false);
         ButterKnife.bind(this, view);
         activity = getActivity();
+
+        String[] placeholderNameArray = new String[]{"Rinktis...", "Petras", "Jonas", "Tomas", "Povilas", "Tadas"};
+        List<String> placeholderList = new ArrayList<String>(Arrays.asList(placeholderNameArray));
+
         allScores = getResources().getStringArray(R.array.scores);
         allPlayers = getResources().getStringArray(R.array.players);
 
 
-        playersAdapter = ArrayAdapter.createFromResource(activity, R.array.players, R.layout.spinner_item);
+        playersAdapter = new ArrayAdapter<>(activity, R.layout.spinner_item);
+        playersAdapter.addAll(placeholderList);
         playersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         scoresBlueAdapter = new ArrayAdapter<>(activity,R.layout.spinner_item);
@@ -86,6 +98,18 @@ public class VersusActivityFragment extends Fragment {
         bluePlayer2.setAdapter(playersAdapter);
         purplePlayer1.setAdapter(playersAdapter);
         purplePlayer2.setAdapter(playersAdapter);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String nameString = prefs.getString(NameActivityFragment.NAMEKEY, "null");
+        bluePlayer1.setSelection(placeholderList.indexOf(nameString));
+
+        lastBluePlayer1 = nameString;
+        playersAdapter.remove(nameString);
+
+        bluePlayer1.setOnItemSelectedListener(this);
+        bluePlayer2.setOnItemSelectedListener(this);
+        purplePlayer1.setOnItemSelectedListener(this);
+        purplePlayer2.setOnItemSelectedListener(this);
 
         blueScore.setAdapter(scoresBlueAdapter);
         purpleScore.setAdapter(scoresPurpleAdapter);
@@ -119,5 +143,34 @@ public class VersusActivityFragment extends Fragment {
         scoresBlueAdapter.clear();
         scoresBlueAdapter.addAll(Arrays.copyOfRange(allScores, 0, allScores.length - selectedScore));
         scoresBlueAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        if (view != null) {
+            if (view.getId() == R.id.bluePlayer1) {
+                playersAdapter.add(lastBluePlayer1);
+                lastBluePlayer1 = parent.getSelectedItem().toString();
+                playersAdapter.remove(lastBluePlayer1);
+            } else if (view.getId() == R.id.bluePlayer2) {
+                playersAdapter.add(lastBluePlayer2);
+                lastBluePlayer2 = parent.getSelectedItem().toString();
+                playersAdapter.remove(lastBluePlayer2);
+            } else if (view.getId() == R.id.purplePlayer1) {
+                playersAdapter.add(lastPurplePlayer1);
+                lastPurplePlayer1 = parent.getSelectedItem().toString();
+                playersAdapter.remove(lastPurplePlayer1);
+            } else if (view.getId() == R.id.purplePlayer2) {
+                playersAdapter.add(lastPurplePlayer2);
+                lastPurplePlayer2 = parent.getSelectedItem().toString();
+                playersAdapter.remove(lastPurplePlayer2);
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
