@@ -16,6 +16,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -27,19 +34,30 @@ public class NameActivityFragment extends Fragment implements AdapterView.OnItem
     private String selectedName;
     public final static String NAMEKEY = "nameKey";
 
+    private final static String PLAYERS = "players";
+    private final static String USERID = "userId";
+    private final static String USERNAME = "username";
+    private final static String SCORE = "score";
+
+    private List<Player> listOfPlayers = new ArrayList<>();
+
     public NameActivityFragment() {
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_name, container, false);
 
-        String[] placeholderNameArray = new String[]{"Rinktis...", "Petras", "Jonas", "Tomas", "Povilas", "Petras", "Jonas", "Tomas", "Povilas", "Petras", "Jonas", "Tomas", "Povilas"};
+        String placeholderJsonString = "{\"players\":[{\"userId\":1,\"username\":\"PlayerA\",\"score\":100},{\"userId\":2,\"username\":\"PlayerB\",\"score\":200},{\"userId\":3,\"username\":\"PlayerC\",\"score\":300}, {\"userId\":4,\"username\":\"PlayerD\",\"score\":400}]}";
+        parseJsonToPlayers(placeholderJsonString);
+
+        //String[] placeholderNameArray = new String[]{"Rinktis...", "Petras", "Jonas", "Tomas", "Povilas", "Petras", "Jonas", "Tomas", "Povilas", "Petras", "Jonas", "Tomas", "Povilas"};
         nameSpinner = (Spinner) rootView.findViewById(R.id.name_spinner);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item);
-        adapter.addAll(placeholderNameArray);
+        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, listOfPlayers);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         nameSpinner.setAdapter(adapter);
@@ -51,7 +69,7 @@ public class NameActivityFragment extends Fragment implements AdapterView.OnItem
 
             @Override
             public void onClick(View v) {
-                if(selectedPosition == 0 || selectedName == null){
+                if(selectedName == null || selectedName == "Rinktis..."){
                     Toast.makeText(v.getContext(), "Reikia pasirinkti vardą!", Toast.LENGTH_SHORT).show();
                 }else{
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -71,11 +89,37 @@ public class NameActivityFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         selectedPosition = position;
-        selectedName = parent.getSelectedItem().toString();
+        Player player = (Player) parent.getSelectedItem();
+        selectedName = player.getUsername();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    private void parseJsonToPlayers(String playersJsonString){
+        try {
+            JSONObject playersJsonObject = new JSONObject(playersJsonString);
+            JSONArray playersArray = playersJsonObject.getJSONArray(PLAYERS);
+
+            for(int i = 0; i < playersArray.length(); i++){
+
+                JSONObject playerInfo = playersArray.getJSONObject(i);
+
+                Player player = new Player();
+                player.setId((int) playerInfo.get(USERID));
+                player.setUsername((String) playerInfo.get(USERNAME));
+                player.setScore((int) playerInfo.get(SCORE));
+
+                listOfPlayers.add(player);
+            }
+
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
