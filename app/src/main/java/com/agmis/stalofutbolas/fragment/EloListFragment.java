@@ -16,9 +16,8 @@ import java.util.Arrays;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by sasly on 2015-10-28.
- */
+
+
 public class EloListFragment extends Fragment {
 
     @Bind(R.id.playerList)

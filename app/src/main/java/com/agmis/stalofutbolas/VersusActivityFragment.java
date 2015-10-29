@@ -1,7 +1,6 @@
 package com.agmis.stalofutbolas;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -11,17 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.agmis.stalofutbolas.R;
+import com.agmis.stalofutbolas.adapter.CustomAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
@@ -31,14 +27,8 @@ import butterknife.OnItemSelected;
  */
 public class VersusActivityFragment extends Fragment {
 
-    @Bind(R.id.bluePlayer1)
-    public Spinner bluePlayer1;
-    @Bind(R.id.bluePlayer2)
-    public Spinner bluePlayer2;
-    @Bind(R.id.purplePlayer1)
-    public Spinner purplePlayer1;
-    @Bind(R.id.purplePlayer2)
-    public Spinner purplePlayer2;
+    @Bind({R.id.bluePlayer1,R.id.bluePlayer2,R.id.purplePlayer1,R.id.purplePlayer2})
+    public List<Spinner> playerSpinnerList;
 
     @Bind(R.id.blueScore)
     public Spinner blueScore;
@@ -53,9 +43,12 @@ public class VersusActivityFragment extends Fragment {
     List<String> purpleScores;
     List<String>  blueScores;
 
-    private ArrayAdapter<CharSequence> playersAdapter;
+    private List<CustomAdapter> spinnersAdapters = new ArrayList<>();
     private ArrayAdapter<CharSequence> scoresPurpleAdapter;
     private ArrayAdapter<CharSequence> scoresBlueAdapter;
+
+
+    public int[] lastSelected = {-1,-1,-1,-1};
 
     public VersusActivityFragment() {
     }
@@ -69,23 +62,20 @@ public class VersusActivityFragment extends Fragment {
         allPlayers = getResources().getStringArray(R.array.players);
 
 
-        playersAdapter = ArrayAdapter.createFromResource(activity, R.array.players, R.layout.spinner_item);
-        playersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        for(int i=0; i< playerSpinnerList.size(); i++){
+            spinnersAdapters.add(new CustomAdapter(activity,R.layout.spinner_item));
+            spinnersAdapters.get(i).addAll(allPlayers);
+            spinnersAdapters.get(i).setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            playerSpinnerList.get(i).setAdapter(spinnersAdapters.get(i));
+        }
 
         scoresBlueAdapter = new ArrayAdapter<>(activity,R.layout.spinner_item);
-        blueScores = new LinkedList<>(Arrays.asList(allScores));
-        scoresBlueAdapter.addAll(blueScores);
+        scoresBlueAdapter.addAll(allScores);
         scoresBlueAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         scoresPurpleAdapter = new ArrayAdapter<>(activity,R.layout.spinner_item);
-        purpleScores = new LinkedList<>(Arrays.asList(allScores));
-        scoresPurpleAdapter.addAll(purpleScores);
+        scoresPurpleAdapter.addAll(allScores);
         scoresPurpleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        bluePlayer1.setAdapter(playersAdapter);
-        bluePlayer2.setAdapter(playersAdapter);
-        purplePlayer1.setAdapter(playersAdapter);
-        purplePlayer2.setAdapter(playersAdapter);
 
         blueScore.setAdapter(scoresBlueAdapter);
         purpleScore.setAdapter(scoresPurpleAdapter);
@@ -96,13 +86,13 @@ public class VersusActivityFragment extends Fragment {
 
     @OnClick(R.id.submitResults)
     public void OnSubmitResultsClick() {
-        String text = bluePlayer1.getSelectedItem().toString() + " and " +
-                bluePlayer2.getSelectedItem().toString() + " VS " +
-                purplePlayer1.getSelectedItem().toString() + " and " +
-                purplePlayer2.getSelectedItem().toString() + "\n" +
-                blueScore.getSelectedItem().toString() + " : " + purpleScore.getSelectedItem().toString();
-
-        Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
+//        String text = playerSpinnerList.getSelectedItem().toString() + " and " +
+//                bluePlayer2.getSelectedItem().toString() + " VS " +
+//                purplePlayer1.getSelectedItem().toString() + " and " +
+//                purplePlayer2.getSelectedItem().toString() + "\n" +
+//                blueScore.getSelectedItem().toString() + " : " + purpleScore.getSelectedItem().toString();
+//
+//        Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
     }
 
     @OnItemSelected(R.id.blueScore)
@@ -119,5 +109,51 @@ public class VersusActivityFragment extends Fragment {
         scoresBlueAdapter.clear();
         scoresBlueAdapter.addAll(Arrays.copyOfRange(allScores, 0, allScores.length - selectedScore));
         scoresBlueAdapter.notifyDataSetChanged();
+    }
+
+    @OnItemSelected(R.id.bluePlayer1)
+    public void OnBluePlayer1Selected(AdapterView<?> parent, View view, int pos, long id){
+        EnableLastSelection(pos,0);
+        DisableListItem(pos, 0);
+
+    }
+    @OnItemSelected(R.id.bluePlayer2)
+    public void OnBluePlayer2Selected(AdapterView<?> parent, View view, int pos, long id){
+        EnableLastSelection(pos, 1);
+        DisableListItem(pos,1);
+
+    }
+    @OnItemSelected(R.id.purplePlayer1)
+    public void OnPurplePlayer1Selected(AdapterView<?> parent, View view, int pos, long id){
+        EnableLastSelection(pos, 2);
+        DisableListItem(pos,2);
+
+    }
+    @OnItemSelected(R.id.purplePlayer2)
+    public void OnPurplePlayer2Selected(AdapterView<?> parent, View view, int pos, long id){
+        EnableLastSelection(pos,3);
+        DisableListItem(pos, 3);
+
+    }
+
+    public void DisableListItem(int pos, int ignoreAdapter){
+        for(int i=0; i < 4; i++){
+            if(i==ignoreAdapter)
+                continue;
+            spinnersAdapters.get(i).disableItem(pos);
+            spinnersAdapters.get(i).notifyDataSetChanged();
+        }
+        lastSelected[ignoreAdapter] =pos;
+    }
+    public void EnableLastSelection(int pos, int ignoreAdapter){
+        for(int i=0; i < 4; i++){
+            if(i==ignoreAdapter)
+                continue;
+
+            if(lastSelected[ignoreAdapter] != -1) {
+                spinnersAdapters.get(i).enableItem(lastSelected[ignoreAdapter]);
+                spinnersAdapters.get(i).notifyDataSetChanged();
+            }
+        }
     }
 }
